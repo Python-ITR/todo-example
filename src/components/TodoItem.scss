@@ -1,0 +1,26 @@
+.todo_item {
+  display: flex;
+  align-items: center;
+
+  & .todo_item__check {
+    height: 30px;
+    width: 30px;
+    margin-right: 1em;
+  }
+
+  & .todo_item__title {
+
+  }
+
+  &.checked {
+    & .todo_item__check {
+      height: 30px;
+      width: 30px;
+      color: #0f0;
+    }
+
+    & .todo_item__title {
+      text-decoration: line-through;
+    }
+  }
+}
