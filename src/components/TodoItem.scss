@@ -2,14 +2,34 @@
   display: flex;
   align-items: center;
 
+  & .todo_item__left_side {
+    margin-right: 0.5em;
+  }
+
   & .todo_item__check {
     height: 30px;
     width: 30px;
-    margin-right: 1em;
   }
 
-  & .todo_item__title {
+  & .todo_item__content_wrapper {
+    flex-grow: 1;
+    & .todo_item__title {
+      margin: 0;
+    }
+    & .todo_item__input {
+      padding: 0;
+      width: 100%;
+      border: none;
+      font-size: 33px;
+      font-size: 2.5rem;
+      font-weight: 500;
+      line-height: 1.2em;
+      overflow: hidden;
+    }
+  }
 
+  & .todo_item__right_side {
+    margin-left: 0.5em;
   }
 
   &.checked {

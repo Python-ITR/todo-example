@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { Container, Row, Col, Button } from "reactstrap";
+import { useSelector } from "react-redux";
 import { AddTodoForm, TodoList, TodoItem, Filters } from "../components";
 
 function* range(start, end, step = 1) {
@@ -9,42 +10,27 @@ function* range(start, end, step = 1) {
 }
 
 const MainView = () => {
-  const [todos, setTodos] = useState(
-    Array.from(range(1, 10)).map((n) => ({
-      title: `Todo ${n}`,
-      done: Math.random() < 0.5,
-    }))
-  );
-  const [current_filter, setCurrentFilter] = useState("all");
+  const todos = useSelector((state) => state.todos);
+  const currentFilter = useSelector(state => state.filter);
 
   const filtred_todos = useMemo(
     () =>
       todos.filter((todo) => {
-        console.log("KLJLKJL");
-        if (current_filter === "all") return true;
-        if (current_filter === "done_only") return todo.done === true;
+        if (currentFilter === "all") return true;
+        if (currentFilter === "done_only") return todo.done === true;
       }),
-    [todos, current_filter]
+    [todos, currentFilter]
   );
 
-  const handleChangeFilter = useCallback((new_filter_value) => {
-    setCurrentFilter(new_filter_value);
-  }, []);
-
-  const handleTodoDelete = useCallback((idx) => {
-    setTodos(
-      todos.filter((_, _idx) => {
-        return _idx !== idx;
-      })
-    );
-  });
+  const handleChangeFilter = useCallback((new_filter_value) => {}, []);
+  const handleTodoDelete = useCallback((idx) => {});
 
   return (
     <Container>
       <Row>
         <Col sm={{ size: 6, offset: 3 }}>
           <Filters
-            current_filter={current_filter}
+            current_filter={currentFilter}
             onChangeFilter={handleChangeFilter}
           />
           <TodoList>
