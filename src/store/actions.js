@@ -15,7 +15,7 @@ export const deleteTodo = (todoId) => ({
 
 export const toggleTodo = (todoId) => ({
   type: TOGGLE_TODO,
-  payload: toggleTodo,
+  payload: todoId,
 });
 
 export const changeTodo = (todoId, todo) => ({

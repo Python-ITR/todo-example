@@ -15,9 +15,21 @@ export const mainReducer = (
         todos: [...state.todos, action.payload],
       };
     case DELETE_TODO:
-      return state;
+      return {
+        ...state,
+        todos: state.todos.filter((_, idx) => idx !== action.payload)
+      }
     case TOGGLE_TODO:
-      return state;
+      return {
+        ...state,
+        todos: state.todos.map((t, idx) => {
+          if (idx !== action.payload) return t
+          return {
+            ...t,
+            done: !t.done
+          }
+        })
+      }
     case CHANGE_TODO:
       return state;
     default:
