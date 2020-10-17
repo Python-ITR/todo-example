@@ -1,12 +1,14 @@
 import React, { memo, useState, useRef } from "react";
 import PT from "prop-types";
 import CN from "classnames";
-import { Button } from "reactstrap";
+import { Button, ButtonGroup } from "reactstrap";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCheckCircle,
   faTrash,
   faSave,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { deleteTodo, toggleTodo, changeTodo } from "../store/actions";
@@ -35,16 +37,15 @@ const TodoItem = memo(({ done = false, title, idx }) => {
       );
       setEditing(false);
     }
-
-  }
+  };
 
   const handleSaveClick = () => {
-    dispatchChangeTodo()
+    dispatchChangeTodo();
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      dispatchChangeTodo()
+      dispatchChangeTodo();
     }
   };
 
@@ -82,9 +83,16 @@ const TodoItem = memo(({ done = false, title, idx }) => {
             <FontAwesomeIcon icon={faSave} />
           </Button>
         ) : (
-          <Button color="danger" onClick={handleDeleteClick}>
-            <FontAwesomeIcon icon={faTrash} />
-          </Button>
+          <ButtonGroup>
+            <Button color="danger" onClick={handleDeleteClick}>
+              <FontAwesomeIcon icon={faTrash} />
+            </Button>
+            <Link to="/todo">
+              <Button type="button" color="secondary">
+                <FontAwesomeIcon icon={faArrowRight} />
+              </Button>
+            </Link>
+          </ButtonGroup>
         )}
       </div>
     </div>
