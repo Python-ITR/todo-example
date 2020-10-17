@@ -1,21 +1,57 @@
-import React, { memo } from "react";
+import React, { memo, useState, useRef } from "react";
 import PT from "prop-types";
 import CN from "classnames";
 import { Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
-import {useDispatch} from "react-redux"
-import {deleteTodo, toggleTodo} from "../store/actions"
+import {
+  faCheckCircle,
+  faTrash,
+  faSave,
+} from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { deleteTodo, toggleTodo, changeTodo } from "../store/actions";
 import "./TodoItem.scss";
 
 const TodoItem = memo(({ done = false, title, idx }) => {
+  const input = useRef();
   const dispatch = useDispatch();
+  const [editing, setEditing] = useState(false);
+
   const handleDeleteClick = () => {
-    dispatch(deleteTodo(idx))
-  }
+    dispatch(deleteTodo(idx));
+  };
+
   const handleToggleClick = () => {
-    dispatch(toggleTodo(idx))
+    dispatch(toggleTodo(idx));
+  };
+
+  const dispatchChangeTodo = () => {
+    if (input && input.current) {
+      dispatch(
+        changeTodo(idx, {
+          title: input.current.value,
+          done,
+        })
+      );
+      setEditing(false);
+    }
+
   }
+
+  const handleSaveClick = () => {
+    dispatchChangeTodo()
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      dispatchChangeTodo()
+    }
+  };
+
+  const handleToggleMode = () => {
+    setEditing(!editing);
+  };
+
   return (
     <div
       className={CN("todo_item", "pt-1", "pb-1", {
@@ -25,17 +61,31 @@ const TodoItem = memo(({ done = false, title, idx }) => {
       <div className="todo_item__left_side" onClick={handleToggleClick}>
         <FontAwesomeIcon className="todo_item__check" icon={faCheckCircle} />
       </div>
-      <div className="todo_item__content_wrapper">
-        {done ? (
-          <input className="todo_item__input" value={title} />
+      <div
+        onDoubleClick={handleToggleMode}
+        className="todo_item__content_wrapper"
+      >
+        {editing ? (
+          <input
+            ref={input}
+            className="todo_item__input"
+            defaultValue={title}
+            onKeyDown={handleKeyDown}
+          />
         ) : (
           <h1 className="todo_item__title">{title}</h1>
         )}
       </div>
       <div className="todo_item__right_side">
-        <Button color="danger" onClick={handleDeleteClick}>
-          <FontAwesomeIcon icon={faTrash} />
-        </Button>
+        {editing ? (
+          <Button color="primary" onClick={handleSaveClick}>
+            <FontAwesomeIcon icon={faSave} />
+          </Button>
+        ) : (
+          <Button color="danger" onClick={handleDeleteClick}>
+            <FontAwesomeIcon icon={faTrash} />
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -44,7 +94,7 @@ const TodoItem = memo(({ done = false, title, idx }) => {
 TodoItem.propTypes = {
   idx: PT.number.isRequired,
   title: PT.string.isRequired,
-  done: PT.bool
+  done: PT.bool,
 };
 
 export default TodoItem;

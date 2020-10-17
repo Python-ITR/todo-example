@@ -6,7 +6,7 @@ import { addTodo } from "../store/actions";
 const AddTodoForm = () => {
   const dispatch = useDispatch();
   const input = useRef();
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (input && input.current) {
       dispatch(
         addTodo({
@@ -16,9 +16,14 @@ const AddTodoForm = () => {
       );
       input.current.value = "";
     }
-  };
+  }, [input, input.current]);
+  const hadleKeyDown = (e) => {
+    if(e.key === "Enter"){
+      handleSubmit()
+    }
+  }
   return (
-    <InputGroup>
+    <InputGroup onKeyDown={hadleKeyDown}>
       <Input innerRef={input} />
       <Button onClick={handleSubmit}>Add</Button>
     </InputGroup>
